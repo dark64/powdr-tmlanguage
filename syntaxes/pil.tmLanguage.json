@@ -1,0 +1,17 @@
+{
+	"name": "PIL",
+	"patterns": [
+		{
+			"include": "#keywords"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.pil",
+				"match": "\\b(col|witness)\\b"
+			}]
+		}
+	},
+	"scopeName": "source.powdr.pil"
+}
