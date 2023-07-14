@@ -86,7 +86,7 @@
           "match": "(?:\\[(<=|@pc)\\])?(?:\\s*)",
           "captures": {
             "1": {
-              "name": "meta.register.flag.powdr"
+              "name": "meta.register.flag.powdr keyword.operator.powdr"
             }
           }
         }
@@ -94,41 +94,82 @@
     },
     "instruction-declaration": {
       "name": "meta.instruction.declaration.powdr",
-      "begin": "\\b(instr)\\b",
+      "begin": "(instr\\b)(?:\\s*([a-zA-Z_][a-zA-Z$_0-9@]*))?\\s*",
       "beginCaptures": {
         "1": {
           "name": "keyword.other.instr.powdr"
+        },
+        "2": {
+          "name": "meta.definition.function.powdr entity.name.function.powdr"
         }
       },
       "end": "(?<=\\})",
       "patterns": [
         {
-          "name": "entity.name.function.instr.powdr",
-          "match": "[a-zA-Z_][a-zA-Z$_0-9@]*"
+          "include": "#instruction-params"
         },
-        { "include": "#instruction-params" },
         {
-          "begin": "\\{",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.curlybrace.open.powdr"
-            }
-          },
-          "end": "\\}",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.curlybrace.close.powdr"
-            }
-          },
-          "patterns": [{ "include": "#instruction-body" }]
+          "include": "#instruction-return-type"
+        },
+        {
+          "include": "#instruction-block"
         }
       ]
     },
     "instruction-params": {
-      "patterns": []
+      "patterns": [
+        {
+          "name": "variable.parameter.powdr",
+          "match": "[a-zA-Z_][a-zA-Z$_0-9@]*"
+        },
+        {
+          "match": "\\:\\s*([a-zA-Z_][a-zA-Z$_0-9@]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.powdr"
+            }
+          }
+        },
+        {
+          "name": "punctuation.separator.parameter.powdr",
+          "match": ","
+        }
+      ]
     },
-    "instruction-body": {
-      "patterns": []
+    "instruction-return-type": {
+      "name": "meta.return.type.instr.powdr",
+      "begin": "\\s*(->)(?=\\s*\\S)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.operator.type.annotation.powdr"
+        }
+      },
+      "end": "(?<=\\{)",
+      "patterns": [
+        {
+          "include": "#instruction-params"
+        }
+      ]
+    },
+    "instruction-block": {
+      "name": "meta.block.instruction.powdr",
+      "begin": "\\{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.block.powdr"
+        }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.block.powdr"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#statements"
+        }
+      ]
     },
     "function-declaration": {
       "patterns": []
@@ -160,6 +201,10 @@
           "match": "\\\\."
         }
       ]
+    },
+    "punctuation-semicolon": {
+      "name": "punctuation.terminator.statement.powdr",
+      "match": ";"
     }
   },
   "scopeName": "source.powdr.asm"
