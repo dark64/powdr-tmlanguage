@@ -1,52 +1,129 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "name": "Powdr",
+  "name": "powdr",
   "patterns": [
     {
       "include": "#comments"
     },
     {
-      "include": "#machine"
+      "include": "#block-comments"
+    },
+    {
+      "include": "#machines"
+    },
+    {
+      "include": "#instructions"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#submachines"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#variables"
     },
     {
       "include": "#strings"
     }
   ],
   "repository": {
-    "machine": {
+    "keywords": {
       "patterns": [
         {
-          "name": "meta.machine",
-          "begin": "\\b(machine)\\s+",
-          "beginCaptures": {
-            "1": {
-              "name": "keyword.other.machine.powdr"
-            }
-          },
-          "end": "(?<=\\})",
+          "name": "keyword.control.powdr",
+          "match": "\\b(debug|file|in|is|loc|match)\\b"
+        },
+        {
+          "name": "keyword.other.powdr",
+          "match": "\\b(constraints|degree|function|instr|label|machine|reg)\\b"
+        },
+        {
+          "name": "keyword.control.pil",
+          "match": "\\b(connect|namespace|macro|include)\\b"
+        },
+        {
+          "name": "storage.type.pil keyword.other.pil",
+          "match": "\\b(col|pol)\\b"
+        },
+        {
+          "name": "storage.modifier.pil keyword.other.pil",
+          "match": "\\b(constant|commit|fixed|public|witness)\\b"
+        }
+      ]
+    },
+    "machines": {
+      "name": "meta.function.powdr",
+      "begin": "(machine)\\s+",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.machine.powdr"
+        }
+      },
+      "end": "(?<=\\{)",
+      "patterns": [
+        {
+          "include": "#block-comments"
+        },
+        {
+          "name": "entity.name.type.machine.powdr",
+          "match": "[a-zA-Z_][a-zA-Z$_0-9@]*"
+        }
+      ]
+    },
+    "submachines": {
+      "name": "meta.submachine.powdr",
+      "match": "([a-zA-Z_][a-zA-Z$_0-9@]*)\\s+([a-zA-Z_][a-zA-Z$_0-9@]*);",
+      "captures": {
+        "1": {
+          "name": "entity.name.type.submachine.powdr"
+        },
+        "2": {
+          "name": "variable.other.submachine.powdr"
+        }
+      }
+    },
+    "instructions": {
+      "name": "meta.instr.powdr",
+      "match": "(instr)\\s+([a-zA-Z_][a-zA-Z$_0-9@]*)",
+      "captures": {
+        "1": {
+          "name": "keyword.other.instr.powdr"
+        },
+        "2": {
+          "name": "meta.definition.instr.powdr entity.name.function.instr.powdr"
+        }
+      }
+    },
+    "functions": {
+      "name": "meta.function.powdr",
+      "begin": "(function)\\s+",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.function.powdr"
+        }
+      },
+      "end": "(?<=\\})",
+      "patterns": [
+        {
+          "include": "#block-comments"
+        },
+        {
+          "name": "meta.definition.function.powdr entity.name.function.powdr",
+          "match": "[a-zA-Z_][a-zA-Z$_0-9@]*"
+        },
+        {
+          "begin": "\\{",
+          "end": "\\}",
           "patterns": [
             {
-              "name": "entity.name.type.machine.powdr",
-              "match": "[a-zA-Z_][a-zA-Z$_0-9@]*"
-            },
-            {
-              "begin": "\\{",
-              "beginCaptures": {
-                "0": {
-                  "name": "punctuation.curlybrace.open.powdr"
-                }
-              },
-              "end": "\\}",
-              "endCaptures": {
-                "0": {
-                  "name": "punctuation.curlybrace.close.powdr"
-                }
-              },
-              "patterns": [
-                {
-                  "include": "#statements"
-                }
-              ]
+              "include": "#statements"
             }
           ]
         }
@@ -54,142 +131,88 @@
     },
     "statements": {
       "patterns": [
-        { "include": "#declarations" },
-        { "include": "#degree" },
-        { "include": "#submachine" },
-        { "include": "#inline-pil" },
-        { "include": "#comments" }
-      ]
-    },
-    "declarations": {
-      "patterns": [
-        { "include": "#register-declaration" },
-        { "include": "#instruction-declaration" },
-        { "include": "#function-declaration" }
-      ]
-    },
-    "register-declaration": {
-      "name": "meta.register.declaration.powdr",
-      "begin": "\\b(reg)\\b",
-      "beginCaptures": {
-        "1": {
-          "name": "keyword.other.reg.powdr"
-        }
-      },
-      "end": "(?=;)",
-      "patterns": [
         {
-          "name": "entity.name.variable.register.powdr",
-          "match": "[a-zA-Z_][a-zA-Z$_0-9@]*"
+          "include": "#block-comments"
         },
         {
-          "match": "(?:\\[(<=|@pc)\\])?(?:\\s*)",
-          "captures": {
+          "include": "#comments"
+        },
+        {
+          "name": "keyword.control.label.powdr",
+          "match": "([a-zA-Z_][a-zA-Z$_0-9@]*)::"
+        },
+        {
+          "name": "meta.expression.assignment.powdr",
+          "begin": "\\b([a-zA-Z_][a-zA-Z$_0-9@]*)(?=\\s*<)\\b",
+          "beginCaptures": {
             "1": {
-              "name": "meta.register.flag.powdr keyword.operator.powdr"
+              "name": "variable.other.powdr"
             }
-          }
-        }
-      ]
-    },
-    "instruction-declaration": {
-      "name": "meta.instruction.declaration.powdr",
-      "begin": "(instr\\b)(?:\\s*([a-zA-Z_][a-zA-Z$_0-9@]*))?\\s*",
-      "beginCaptures": {
-        "1": {
-          "name": "keyword.other.instr.powdr"
-        },
-        "2": {
-          "name": "meta.definition.function.powdr entity.name.function.powdr"
-        }
-      },
-      "end": "(?<=\\})",
-      "patterns": [
-        {
-          "include": "#instruction-params"
+          },
+          "end": "(?=;)",
+          "patterns": [
+            {
+              "include": "#block-comments"
+            },
+            {
+              "include": "#constants"
+            },
+            {
+              "include": "#strings"
+            },
+            {
+              "include": "#variables"
+            }
+          ]
         },
         {
-          "include": "#instruction-return-type"
-        },
-        {
-          "include": "#instruction-block"
-        }
-      ]
-    },
-    "instruction-params": {
-      "patterns": [
-        {
-          "name": "variable.parameter.powdr",
-          "match": "[a-zA-Z_][a-zA-Z$_0-9@]*"
-        },
-        {
-          "match": "\\:\\s*([a-zA-Z_][a-zA-Z$_0-9@]*)",
-          "captures": {
+          "name": "meta.expression.function.call.powdr",
+          "begin": "\\b([a-zA-Z_][a-zA-Z$_0-9@]*)(?!\\s*<)\\b",
+          "beginCaptures": {
             "1": {
-              "name": "storage.type.powdr"
+              "name": "meta.definition.function.powdr entity.name.function.powdr"
             }
-          }
+          },
+          "end": "(?=;)",
+          "patterns": [
+            {
+              "include": "#block-comments"
+            },
+            {
+              "include": "#constants"
+            },
+            {
+              "include": "#variables"
+            }
+          ]
+        }
+      ]
+    },
+    "variables": {
+      "name": "variable.other.powdr",
+      "match": "([a-zA-Z_][a-zA-Z$_0-9@]*)(?:')?"
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.powdr",
+          "match": "(0x[0-9A-Fa-f][0-9A-Fa-f_]*)"
         },
         {
-          "name": "punctuation.separator.parameter.powdr",
-          "match": ","
+          "name": "constant.numeric.powdr",
+          "match": "([0-9][0-9_]*)"
         }
       ]
-    },
-    "instruction-return-type": {
-      "name": "meta.return.type.instr.powdr",
-      "begin": "\\s*(->)(?=\\s*\\S)",
-      "beginCaptures": {
-        "1": {
-          "name": "keyword.operator.type.annotation.powdr"
-        }
-      },
-      "end": "(?<=\\{)",
-      "patterns": [
-        {
-          "include": "#instruction-params"
-        }
-      ]
-    },
-    "instruction-block": {
-      "name": "meta.block.instruction.powdr",
-      "begin": "\\{",
-      "beginCaptures": {
-        "0": {
-          "name": "punctuation.definition.block.powdr"
-        }
-      },
-      "end": "\\}",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.definition.block.powdr"
-        }
-      },
-      "patterns": [
-        {
-          "include": "#statements"
-        }
-      ]
-    },
-    "function-declaration": {
-      "patterns": []
-    },
-    "degree": {
-      "patterns": []
-    },
-    "submachine": {
-      "patterns": []
-    },
-    "inline-pil": {
-      "patterns": []
     },
     "comments": {
-      "patterns": [
-        {
-          "name": "comment.line.double-slash.powdr",
-          "match": "\\s*//.*"
-        }
-      ]
+      "name": "comment.line.double-slash.powdr",
+      "match": "\\s*//.*"
+    },
+    "block-comments": {
+      "name": "comment.block.powdr",
+      "begin": "/\\*(?!\\*)",
+      "end": "\\*/",
+      "patterns": [{ "include": "#comments" }]
     },
     "strings": {
       "name": "string.quoted.double.powdr",
@@ -201,11 +224,7 @@
           "match": "\\\\."
         }
       ]
-    },
-    "punctuation-semicolon": {
-      "name": "punctuation.terminator.statement.powdr",
-      "match": ";"
     }
   },
-  "scopeName": "source.powdr.asm"
+  "scopeName": "source.powdr"
 }

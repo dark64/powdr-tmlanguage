@@ -1,7 +1,7 @@
 {
   "name": "powdr",
   "displayName": "powdr",
-  "description": "Powdr syntax highlighting",
+  "description": "powdr syntax highlighting",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.80.0"
@@ -18,8 +18,6 @@
           "powdr"
         ],
         "extensions": [
-          ".asm",
-          ".pasm",
           ".powdr"
         ],
         "configuration": "./language-configuration.json"
@@ -27,13 +25,8 @@
     ],
     "grammars": [
       {
-        "language": "pil",
-        "scopeName": "source.powdr.pil",
-        "path": "./syntaxes/pil.tmLanguage.json"
-      },
-      {
         "language": "powdr",
-        "scopeName": "source.powdr.asm",
+        "scopeName": "source.powdr",
         "path": "./syntaxes/powdr.tmLanguage.json"
       }
     ]
