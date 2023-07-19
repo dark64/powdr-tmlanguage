@@ -161,6 +161,9 @@
               "include": "#strings"
             },
             {
+              "include": "#function-calls"
+            },
+            {
               "include": "#variables"
             }
           ]
@@ -185,6 +188,27 @@
               "include": "#variables"
             }
           ]
+        }
+      ]
+    },
+    "function-calls": {
+      "name": "meta.expression.function.call.powdr",
+      "begin": "([a-zA-Z_][a-zA-Z$_0-9@]*)(\\()",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.name.function.call.powdr"
+        }
+      },
+      "end": "\\)",
+      "patterns": [
+        {
+          "include": "#block-comments"
+        },
+        {
+          "include": "#constants"
+        },
+        {
+          "include": "#variables"
         }
       ]
     },
