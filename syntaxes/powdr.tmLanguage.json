@@ -45,15 +45,15 @@
           "match": "\\b(constraints|degree|function|instr|label|machine|reg)\\b"
         },
         {
-          "name": "keyword.control.pil",
+          "name": "keyword.control.pil.powdr",
           "match": "\\b(connect|namespace|macro|include)\\b"
         },
         {
-          "name": "storage.type.pil keyword.other.pil",
+          "name": "storage.type.pil.powdr keyword.other.pil.powdr",
           "match": "\\b(col|pol)\\b"
         },
         {
-          "name": "storage.modifier.pil keyword.other.pil",
+          "name": "storage.modifier.pil.powdr keyword.other.pil.powdr",
           "match": "\\b(constant|commit|fixed|public|witness)\\b"
         }
       ]
@@ -79,7 +79,7 @@
     },
     "submachines": {
       "name": "meta.submachine.powdr",
-      "match": "([a-zA-Z_][a-zA-Z$_0-9@]*)\\s+([a-zA-Z_][a-zA-Z$_0-9@]*);",
+      "match": "([a-zA-Z_][a-zA-Z$_0-9@]*)\\s+([a-zA-Z_][a-zA-Z$_0-9@]*)\\s*;",
       "captures": {
         "1": {
           "name": "entity.name.type.submachine.powdr"

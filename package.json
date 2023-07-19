@@ -18,7 +18,8 @@
           "powdr"
         ],
         "extensions": [
-          ".powdr"
+          ".powdr",
+          ".asm"
         ],
         "configuration": "./language-configuration.json"
       }
